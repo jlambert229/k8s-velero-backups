@@ -4,12 +4,12 @@ metadata:
   name: media-daily
   namespace: velero
 spec:
-  schedule: "0 2 * * *"  # 2am daily
+  schedule: "0 2 * * *" # 2am daily
   template:
     includedNamespaces:
       - media
     includedResources:
-      - '*'
+      - "*"
     defaultVolumesToFsBackup: true
     storageLocation: default
-    ttl: 168h  # Keep 7 days
+    ttl: 168h # Keep 7 days
