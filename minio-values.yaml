@@ -1,0 +1,48 @@
+mode: standalone
+
+replicas: 1
+
+persistence:
+  enabled: true
+  storageClass: nfs-appdata
+  size: 50Gi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+service:
+  type: ClusterIP
+  port: 9000
+
+consoleService:
+  enabled: true
+  port: 9001
+
+buckets:
+  - name: velero
+    policy: none
+    purge: false
+
+users:
+  - accessKey: velero
+    secretKey: velero-secret-key
+    policy: readwrite
+
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  hosts:
+    - minio.media.lan
+  tls: []
+
+consoleIngress:
+  enabled: true
+  ingressClassName: traefik
+  hosts:
+    - minio-console.media.lan
+  tls: []

@@ -1,0 +1,19 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: cluster-weekly
+  namespace: velero
+spec:
+  schedule: "0 3 * * 0"  # 3am Sunday
+  template:
+    includedNamespaces:
+      - '*'
+    excludedNamespaces:
+      - kube-system
+      - kube-public
+      - kube-node-lease
+    includedResources:
+      - '*'
+    defaultVolumesToFsBackup: true
+    storageLocation: default
+    ttl: 720h  # Keep 30 days
