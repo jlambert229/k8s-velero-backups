@@ -1,38 +1,39 @@
 # Velero Deployment Status
 
-## Current State
+## ✅ Deployment Complete
 
-**Date:** 2026-02-08  
+**Date:** 2026-02-09  
 **Cluster:** talos (1 CP + 2 workers, 2 vCPU / ~3.5GB RAM each)
 
-### ✅ Successfully Deployed via Helm
+### Successfully Deployed via Helm
 
 1. **MinIO** - S3-compatible storage backend
    - Helm release: `minio` (namespace: `velero`)
-   - Status: Running (pod healthy)
+   - Status: ✅ Running
    - Storage: 50GB NFS PVC
    - Access: Internal only (`minio.velero.svc.cluster.local:9000`)
-   - Credentials: velero / velero-secret-key
+   - Bucket: `velero` (created)
 
 2. **Velero Controller** - Backup orchestration
-   - Helm release: `velero` (namespace: `velero`)
-   - Status: Deployed via Helm (pod pending due to resource constraints)
-   - Configuration: Manifest backups only (node-agent disabled)
+   - Helm release: `velero` (namespace: `velero`) 
+   - Status: ✅ Running (v1.17.1)
+   - Backup Storage Location: ✅ Available
+   - Configuration: Manifest backups (node-agent disabled to conserve resources)
 
-### ⚠️  Resource Constraints
+3. **Backup Schedules**
+   - `media-daily`: Daily at 2:00 AM UTC (media namespace)
+   - `cluster-weekly`: Weekly Sunday at 3:00 AM UTC (full cluster)
 
-**Issue:** Worker nodes are heavily loaded (53-71% memory usage)
+### Resource Optimization
 
-**Running services:**
-- Full media stack (Plex, Sonarr, Radarr, qBit, Bazarr, Overseerr, Tautulli, SABnzbd)
-- Prometheus + Grafana monitoring
-- Vault + External Secrets Operator
-- Consul
-- VPA (Vertical Pod Autoscaler)
-- cert-manager
-- Traefik
+**Temporarily scaled down VPA during initial deployment**
+- VPA re-enabled after Velero startup
+- Final resource usage: ~56-70% memory on workers
 
-**Velero status:** Pod cannot schedule (insufficient memory)
+**Resource requests (optimized for constrained cluster):**
+- MinIO: 50m CPU / 128Mi RAM
+- Velero: 25m CPU / 128Mi RAM
+- Node-agent: Disabled (PVC backups disabled to save resources)
 
 ## Completion Options
 

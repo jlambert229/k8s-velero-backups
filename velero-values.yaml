@@ -1,6 +1,6 @@
 image:
   repository: velero/velero
-  tag: v1.14.1
+  tag: v1.17.1  # Match chart version 11.3.2
 
 # Skip CRD upgrade job (causes ImagePullBackOff)
 upgradeCRDs: false
