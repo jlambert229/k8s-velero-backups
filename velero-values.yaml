@@ -2,6 +2,10 @@ image:
   repository: velero/velero
   tag: v1.14.1
 
+# Skip CRD upgrade job (causes ImagePullBackOff)
+upgradeCRDs: false
+cleanUpCRDs: false
+
 initContainers:
   - name: velero-plugin-for-aws
     image: velero/velero-plugin-for-aws:v1.10.1
@@ -27,8 +31,8 @@ configuration:
       config:
         region: minio
 
-  # Use Restic for filesystem-level PVC backups
-  uploaderType: restic
+  # Use kopia for filesystem-level PVC backups (restic was deprecated)
+  uploaderType: kopia
   defaultVolumesToFsBackup: true
 
   # Namespaces to include in cluster backups
@@ -38,19 +42,9 @@ configuration:
   # Increase timeout for large volumes
   fsBackupTimeout: 4h
 
-# Deploy node agent (Restic DaemonSet)
-deployNodeAgent: true
-
-nodeAgent:
-  podVolumePath: /var/lib/kubelet/pods
-  privileged: false
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+# Disable node agent to reduce resource usage
+# Can be enabled later when cluster has more resources
+deployNodeAgent: false
 
 credentials:
   useSecret: true
@@ -61,11 +55,11 @@ schedules: {}
 
 resources:
   requests:
-    cpu: 100m
+    cpu: 50m
     memory: 128Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 200m
+    memory: 256Mi
 
 rbac:
   create: true
