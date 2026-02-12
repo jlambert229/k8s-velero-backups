@@ -1,5 +1,8 @@
 ## k8s-velero-backups
 
+![pre-commit](https://github.com/jlambert229/k8s-velero-backups/actions/workflows/pre-commit.yml/badge.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/jlambert229/k8s-velero-backups)
+
 Cluster-level disaster recovery for Kubernetes using [Velero](https://velero.io/) with MinIO as S3-compatible backend.
 
 **Blog post:** [Kubernetes Cluster Backups with Velero](https://foggyclouds.io/post/k8s-velero-backups/)
